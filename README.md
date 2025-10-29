@@ -24,6 +24,21 @@ This repo provides scripts for installing Kubernetes on Windows Subsystem for Li
        docker --version
        socker run hello-world
        ```
+  1. Verify `systemd` is enabled
+     ```
+     systemctl stats
+     ```
+     If not enabled ([Use systemd to manage WSL services](https://learn.microsoft.com/en-us/windows/wsl/systemd))
+     * edit `/etc/wsl.conf`
+     * add
+       ```
+       [boot]
+       systemd=true
+       ```
+    * From a command (admin) terminal
+      ```
+      wsl --shutdown 
+      ```
 
   1. Verify curl is installed
      ```
@@ -57,6 +72,7 @@ K3s [k3s.io](https://k3s.io/), derived from the official Kubernetes distro, is p
      ```
      export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
      ```
+     Note: If you get a permission denied error chmod the permissions
 
   1. Verify `kubctl`
      ```
@@ -95,9 +111,10 @@ K3s [k3s.io](https://k3s.io/), derived from the official Kubernetes distro, is p
         * [Install and Set Up kubectl on Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#enable-shell-autocompletion)
 
 ## Install Helm
+Many Kubernetes services are installed using the Helm package manager 
 There are a variety of methods for installing Helm (see [Install Helm - helm.sh](https://helm.sh/docs/intro/install/)). 
 
-  1. Install helm using apt-get </br>
+  1. Install Helm using apt-get </br>
      Convenience script: `helm/install.sh`
     
     ```
@@ -108,15 +125,38 @@ There are a variety of methods for installing Helm (see [Install Helm - helm.sh]
     sudo apt-get install helm
     ```
 
+## Install Desired Management Interfaces
+### K9s 
+The CLI to manage your clusters in style
 
-## Install Desired Services
+  * Resources
+    * [k9scli.io](https://k9scli.io/)
+    * [k9s github repo](https://k9scli.io/)
+    * [k9s commands](https://k9scli.io/topics/commands/)
+
+
 ### Kubernetes Dashboard
 Reference: [Deploy and Access the Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/)
+
+  1. Install the Kubernetes Dashboard </br>
+     Conveneince script `dashboard/install.sh'
+     ```
+        # Add kubernetes-dashboard repository
+        helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+        # Deploy a Helm Release named "kubernetes-dashboard" using the kubernetes-dashboard chart
+        helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+     ```
+  * Notes:
+    * [Troubleshooting the Kubernetes Dashboard](https://zeet.co/blog/troubleshooting-the-kubernetes-dashboard-not-working-issue)
+    * [Kubernetes - Dashboard Setup - Geeks for Geeks](https://www.geeksforgeeks.org/devops/kubernetes-dashboard-setup/)
 
 
 ## Resources
   * [What is the differrence between K3s and K3d](https://shyam.kubeify.com/2025/03/what-is-difference-between-k3s-and-k3d.html)
   * [Getting started with Docker containers on WSL - Microsoft Learn](https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-containers)
+
+## Install Desired Services
+
 
 
 
